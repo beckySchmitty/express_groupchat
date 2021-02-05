@@ -62,18 +62,25 @@ ws.onclose = function (evt) {
 
 /** send message when button pushed. */
 
-$('form').submit(function (evt) {
+$('form').submit(async function (evt) {
   evt.preventDefault();
 
   if ($("#m").val() === '/joke') {
-    let data = {type: "joke", text: "This is a terrible joke"};
+    let joke = await getJoke();
+    let data = {type: "joke", text: joke};
     ws.send(JSON.stringify(data));
   } else {
     let data = {type: "chat", text: $("#m").val()};
     ws.send(JSON.stringify(data));
   }
 
-
   $('#m').val('');
 });
+
+// calls JokeAPI, returns single line joke about coding
+async function getJoke() {
+  let resp = await axios.get('https://v2.jokeapi.dev/joke/Coding?type=single');
+  let joke = resp.data.joke || "Lol the Api for jokes is not working";
+  return joke;
+}
 
