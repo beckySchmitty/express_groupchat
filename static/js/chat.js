@@ -38,6 +38,10 @@ ws.onmessage = function(evt) {
     item = $(`<li><b>${msg.name}: </b>${msg.text}</li>`);
   }
 
+  else if (msg.type === "memberList") {
+    item = $(`<li><b>${msg.name}: </b>${msg.text}</li>`);
+  }
+
   else {
     return console.error(`bad message: ${msg}`);
   }
@@ -65,10 +69,17 @@ ws.onclose = function (evt) {
 $('form').submit(async function (evt) {
   evt.preventDefault();
 
+  // handle /joke 
   if ($("#m").val() === '/joke') {
     let joke = await getJoke();
     let data = {type: "joke", text: joke};
     ws.send(JSON.stringify(data));
+
+    // handle /members
+  } else if ($("#m").val() === '/members') {
+    let data = {type: "memberList", text: $("#m").val()};
+    ws.send(JSON.stringify(data));
+    // handle normal chat sent
   } else {
     let data = {type: "chat", text: $("#m").val()};
     ws.send(JSON.stringify(data));

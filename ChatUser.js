@@ -38,7 +38,6 @@ class ChatUser {
   }
 
   /** handle a chat: broadcast to room. */
-
   handleChat(text) {
     this.room.broadcast({
       name: this.name,
@@ -47,11 +46,10 @@ class ChatUser {
     });
   }
 
-    /** handle a joke: SECRET - only user can see after
+    /** handle a joke: only user can see the joke, not broadcasted
      * they type "/joke" into the new message field
   
     . */
-
     handleJoke(text) {
       this.send(JSON.stringify ({
         name: 'Server',
@@ -60,18 +58,31 @@ class ChatUser {
       }));
     }
 
+    /** handle showing memberlist: only user can see the list, not broadcasted
+     * they type "/members" into the new message field
+  
+    . */
+    handleMemberList() {
+      console.log(`******************${this.room.members}`)
+      this.send(JSON.stringify ({
+        name: 'Server',
+        type: 'memberList',
+        text: JSON.stringify(this.room.memberList)
+      }));
+    }
+
   /** Handle messages from client:
    *
    * - {type: "join", name: username} : join
    * - {type: "chat", text: msg }     : chat
    */
-
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
 
     if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
     else if (msg.type === 'joke') this.handleJoke(msg.text);
+    else if (msg.type === 'memberList') this.handleMemberList();
     else throw new Error(`bad message: ${msg.type}`);
   }
 

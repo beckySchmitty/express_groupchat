@@ -26,26 +26,24 @@ class Room {
   }
 
   /** make a new room, starting with empty set of listeners */
-
   constructor(roomName) {
     this.name = roomName;
     this.members = new Set();
+    this.memberList = [];
   }
 
   /** member joining a room. */
-
   join(member) {
     this.members.add(member);
+    this.memberList.push(member.name)
   }
 
-  /** member leaving a room. */
-
-  leave(member) {
-    this.members.delete(member);
-  }
+ /** member leaving a room. */
+ leave(member) {
+  this.members.delete(member);
+}
 
   /** send message to all members in a room. */
-
   broadcast(data) {
     for (let member of this.members) {
       member.send(JSON.stringify(data));
