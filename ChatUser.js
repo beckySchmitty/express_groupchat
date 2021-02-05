@@ -47,6 +47,19 @@ class ChatUser {
     });
   }
 
+    /** handle a joke: SECRET - only user can see after
+     * they type "/joke" into the new message field
+  
+    . */
+
+    handleJoke(text) {
+      this.send(JSON.stringify ({
+        name: 'Server',
+        type: 'joke',
+        text: text
+      }));
+    }
+
   /** Handle messages from client:
    *
    * - {type: "join", name: username} : join
@@ -58,6 +71,7 @@ class ChatUser {
 
     if (msg.type === 'join') this.handleJoin(msg.name);
     else if (msg.type === 'chat') this.handleChat(msg.text);
+    else if (msg.type === 'joke') this.handleJoke(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
   }
 
