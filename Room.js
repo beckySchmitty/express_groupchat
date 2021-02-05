@@ -41,6 +41,8 @@ class Room {
  /** member leaving a room. */
  leave(member) {
   this.members.delete(member);
+  let idx = this.memberList.indexOf(member.name);
+  this.memberList.splice(idx,1);
 }
 
   /** send message to all members in a room. */

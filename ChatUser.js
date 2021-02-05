@@ -63,11 +63,10 @@ class ChatUser {
   
     . */
     handleMemberList() {
-      console.log(`******************${this.room.members}`)
       this.send(JSON.stringify ({
         name: 'Server',
         type: 'memberList',
-        text: JSON.stringify(this.room.memberList)
+        text: this.room.memberList
       }));
     }
 
